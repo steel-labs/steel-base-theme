@@ -33,8 +33,34 @@ gulp.task('js-main', function() {
 });
 
 
+/**
+ *  Vendors task
+ */
+gulp.task('vendors', function() {
+    if(variables.jsVendorsPath.length){
+        gulp.src(variables.jsVendorsPath)
+            .pipe(concat('vendors.js'))
+            .pipe(gulp.dest(variables.themePath + variables.jsFolder))
+            .pipe(uglify())
+            .pipe(rename({suffix: '.min'}))
+            .pipe(gulp.dest(variables.themePath + variables.jsFolder));
+    }
 
+    if(variables.cssVendorsPath.length){
+        gulp.src(variables.cssVendorsPath)
+            .pipe(concat('vendors.css'))
+            .pipe(gulp.dest(variables.themePath + variables.cssFolder))
+            .pipe(cssmin())
+            .pipe(rename({suffix: '.min'}))
+            .pipe(gulp.dest(variables.themePath + variables.cssFolder));
+    }
+});
+
+/**
+ *  Watch
+ */
 gulp.task('default', function() {
     gulp.watch([variables.themePath + variables.sassFolder + '**/*.scss'],['sass-main']);
     gulp.watch([variables.themePath + variables.jsFolder + 'modules/*.js'],['js-main']);
+    gulp.watch(['./variables.json'],['vendors']);
 });

@@ -2,5 +2,11 @@
   "themePath" : "./default-theme/",
   "sassFolder" : "sass/",
   "cssFolder" : "css/",
-  "jsFolder" : "js/"
+  "jsFolder" : "js/",
+  "jsVendorsPath" : [
+
+  ],
+  "cssVendorsPath" : [
+
+  ]
 }
