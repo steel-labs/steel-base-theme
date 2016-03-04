@@ -5,6 +5,7 @@ var gulp = require('gulp'),
     rename = require('gulp-rename'),
     concat = require('gulp-concat'),
     uglify = require('gulp-uglify'),
+    replace = require('gulp-replace'),
     shell = require('gulp-shell'),
     variables = JSON.parse(fs.readFileSync('./variables.json'));
 
@@ -26,6 +27,7 @@ gulp.task('sass-main', function() {
 gulp.task('js-main', function() {
     gulp.src(variables.themePath + variables.jsFolder + '/modules/*.js')
         .pipe(concat('main.js'))
+        .pipe(replace('@__THEMEDIR__', variables.themePathWebroot))
         .pipe(gulp.dest(variables.themePath + variables.jsFolder))
         .pipe(uglify())
         .pipe(rename({suffix: '.min'}))
