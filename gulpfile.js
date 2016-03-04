@@ -5,6 +5,7 @@ var gulp = require('gulp'),
     rename = require('gulp-rename'),
     concat = require('gulp-concat'),
     uglify = require('gulp-uglify'),
+    shell = require('gulp-shell'),
     variables = JSON.parse(fs.readFileSync('./variables.json'));
 
 /**
@@ -35,6 +36,11 @@ gulp.task('js-main', function() {
  *  Vendors task
  */
 gulp.task('vendors', function() {
+    // shell task
+    gulp.src('*.js', {read: false})
+        .pipe(shell('bower update'));
+
+    // vendor js concat and min
     if(variables.jsVendorsPath.length){
         gulp.src(variables.jsVendorsPath)
             .pipe(concat('vendors.js'))
@@ -44,6 +50,7 @@ gulp.task('vendors', function() {
             .pipe(gulp.dest(variables.themePath + variables.jsFolder));
     }
 
+    // vendor css concat and min
     if(variables.cssVendorsPath.length){
         gulp.src(variables.cssVendorsPath)
             .pipe(concat('vendors.css'))
@@ -57,13 +64,12 @@ gulp.task('vendors', function() {
 /**
  *  Watch
  */
-gulp.task('default', function() {
+gulp.task('watch', function() {
     gulp.watch([variables.themePath + variables.sassFolder + '**/*.scss'],['sass-main']);
     gulp.watch([variables.themePath + variables.jsFolder + 'modules/*.js'],['js-main']);
-    gulp.watch(['./variables.json'],['vendors']);
 });
 
 /**
- *  Base Task
+ *  Default Task
  */
-gulp.task('base', ['sass-main', 'js-main', 'vendors']);
+gulp.task('default', ['vendors', 'sass-main', 'js-main']);
