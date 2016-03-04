@@ -5,7 +5,8 @@
   "cssFolder" : "css/",
   "jsFolder" : "js/",
   "jsVendorsPath" : [
-    "bower_components/jQuery/dist/jquery.min.js"
+    "bower_components/jQuery/dist/jquery.min.js",
+    "bower_components/js-cookie/src/js.cookie.js"
   ],
   "cssVendorsPath" : [
 

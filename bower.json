@@ -18,6 +18,7 @@
     "bourbon": "^4.2.6",
     "susy": "^2.2.12",
     "sass-breakpoints": "^1.0.0",
-    "jQuery": "^2.2.1"
+    "jQuery": "^2.2.1",
+    "js-cookie": "^2.1.0"
   }
 }
