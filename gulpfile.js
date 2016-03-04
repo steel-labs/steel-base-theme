@@ -3,12 +3,14 @@ var gulp = require('gulp'),
     sass = require('gulp-sass'),
     cssmin = require('gulp-minify-css'),
     rename = require('gulp-rename'),
+    concat = require('gulp-concat'),
+    uglify = require('gulp-uglify'),
     variables = JSON.parse(fs.readFileSync('./variables.json'));
 
 /**
  *  Main sass task
  */
-gulp.task('sassMain', function() {
+gulp.task('sass-main', function() {
     gulp.src(variables.themePath + variables.sassFolder + 'screen.scss')
         .pipe(sass().on('error', sass.logError))
         .pipe(gulp.dest(variables.themePath + variables.cssFolder))
@@ -18,9 +20,21 @@ gulp.task('sassMain', function() {
 });
 
 
+/**
+ *  Main JS task
+ */
+gulp.task('js-main', function() {
+    gulp.src(variables.themePath + variables.jsFolder + '/modules/*.js')
+        .pipe(concat('main.js'))
+        .pipe(gulp.dest(variables.themePath + variables.jsFolder))
+        .pipe(uglify())
+        .pipe(rename({suffix: '.min'}))
+        .pipe(gulp.dest(variables.themePath + variables.jsFolder));
+});
 
 
 
 gulp.task('default', function() {
-    gulp.watch([variables.themePath + variables.sassFolder + '**/*.scss'],['sassMain']);
+    gulp.watch([variables.themePath + variables.sassFolder + '**/*.scss'],['sass-main']);
+    gulp.watch([variables.themePath + variables.jsFolder + 'modules/*.js'],['js-main']);
 });

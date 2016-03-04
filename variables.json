@@ -1,5 +1,6 @@
 {
   "themePath" : "./default-theme/",
   "sassFolder" : "sass/",
-  "cssFolder" : "css/"
+  "cssFolder" : "css/",
+  "jsFolder" : "js/"
 }
