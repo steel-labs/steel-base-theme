@@ -4,7 +4,7 @@
   "cssFolder" : "css/",
   "jsFolder" : "js/",
   "jsVendorsPath" : [
-
+    "bower_components/jQuery/dist/jquery.min.js"
   ],
   "cssVendorsPath" : [
 

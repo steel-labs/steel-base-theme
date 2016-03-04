@@ -19,7 +19,6 @@ gulp.task('sass-main', function() {
         .pipe(gulp.dest(variables.themePath + variables.cssFolder));
 });
 
-
 /**
  *  Main JS task
  */
@@ -31,7 +30,6 @@ gulp.task('js-main', function() {
         .pipe(rename({suffix: '.min'}))
         .pipe(gulp.dest(variables.themePath + variables.jsFolder));
 });
-
 
 /**
  *  Vendors task
@@ -64,3 +62,8 @@ gulp.task('default', function() {
     gulp.watch([variables.themePath + variables.jsFolder + 'modules/*.js'],['js-main']);
     gulp.watch(['./variables.json'],['vendors']);
 });
+
+/**
+ *  Base Task
+ */
+gulp.task('base', ['sass-main', 'js-main', 'vendors']);
