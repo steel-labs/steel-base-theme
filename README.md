@@ -22,7 +22,8 @@
 In here you will put all the private API keys required for the tasks you need.
 
 ##### Compressing images 
-- Insert your TinyPng api key in secret.json. Es:
+- Get a new TinyPng api key from https://tinypng.com/developers or retrieve yours from https://tinypng.com/developers/subscription.
+- Insert it in secret.json. Es:
 ```
 "TinyPng" : "YOUR_API_KEY"
 ```
