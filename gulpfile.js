@@ -1,5 +1,4 @@
 var gulp = require('gulp'),
-    watch = require('gulp-watch'),
     fs = require('fs'),
     sass = require('gulp-sass'),
     cssmin = require('gulp-minify-css'),
@@ -17,7 +16,7 @@ if(fs.exists(secretPath)){
     secret = JSON.parse(fs.readFileSync(secretPath));
 } else {
     console.log('---');
-    console.log('No secret.json file provided.')
+    console.log('No secret.json file provided.');
     console.log('---');
 }
 
@@ -97,7 +96,7 @@ gulp.task('images', function () {
             .pipe(gulp.dest(variables.themePath + variables.imgFolder));
     } else {
         console.log('---');
-        console.log('No TinyPng key provided.')
+        console.log('No TinyPng key provided.');
         console.log('---');
     }
 });
@@ -116,4 +115,4 @@ gulp.task('watch', function() {
  *  Callable Task
  */
 gulp.task('default', ['bower', 'vendors', 'sass-main', 'js-main', 'images', 'watch']);
-gulp.task('develop', ['vendors', 'sass-main', 'js-main', 'images']);
+gulp.task('deploy', ['vendors', 'sass-main', 'js-main', 'images']);
