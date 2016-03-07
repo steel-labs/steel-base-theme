@@ -4,6 +4,7 @@
   "sassFolder" : "sass/",
   "cssFolder" : "css/",
   "jsFolder" : "js/",
+  "imgFolder" : "img/",
   "jsVendorsPath" : [
     "bower_components/jQuery/dist/jquery.min.js",
     "bower_components/js-cookie/src/js.cookie.js"

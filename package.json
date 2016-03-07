@@ -11,6 +11,7 @@
     "gulp-replace": "^0.5.4",
     "gulp-sass": "^2.2.0",
     "gulp-shell": "^0.5.2",
+    "gulp-tinypng-compress": "^1.2.0",
     "gulp-uglify": "^1.5.3"
   },
   "scripts": {
@@ -19,5 +20,6 @@
   },
   "author": "",
   "license": "ISC",
-  "devDependencies": {}
+  "devDependencies": {
+  }
 }

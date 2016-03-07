@@ -1,4 +1,5 @@
 var gulp = require('gulp'),
+    watch = require('gulp-watch'),
     fs = require('fs'),
     sass = require('gulp-sass'),
     cssmin = require('gulp-minify-css'),
@@ -7,7 +8,18 @@ var gulp = require('gulp'),
     uglify = require('gulp-uglify'),
     replace = require('gulp-replace'),
     shell = require('gulp-shell'),
-    variables = JSON.parse(fs.readFileSync('./variables.json'));
+    tinypng = require('gulp-tinypng-compress'),
+    variables = JSON.parse(fs.readFileSync('./variables.json')),
+    secretPath = './secret.json',
+    secret = null;
+
+if(fs.exists(secretPath)){
+    secret = JSON.parse(fs.readFileSync(secretPath));
+} else {
+    console.log('---');
+    console.log('No secret.json file provided.')
+    console.log('---');
+}
 
 /**
  *  Main sass task
@@ -35,13 +47,19 @@ gulp.task('js-main', function() {
 });
 
 /**
- *  Vendors task
+ *  Bower task
  */
-gulp.task('vendors', function() {
-    // shell task
+gulp.task('bower', function() {
     gulp.src('*.js', {read: false})
         .pipe(shell('bower update'));
 
+});
+
+
+/**
+ *  Vendors task
+ */
+gulp.task('vendors', function() {
     // vendor js concat and min
     if(variables.jsVendorsPath.length){
         gulp.src(variables.jsVendorsPath)
@@ -64,6 +82,28 @@ gulp.task('vendors', function() {
 });
 
 /**
+ *  Minimise images task
+ */
+
+gulp.task('images', function () {
+    if(secret && secret.TinyPng){
+        gulp.src(variables.themePath + variables.imgFolder + '*.{png,jpg,jpeg}')
+            .pipe(tinypng({
+                key : secret.TinyPng,
+                log: true,
+                sameDest: true,
+                sigFile: variables.themePath + variables.imgFolder + '.tinypng-sigs'
+            }))
+            .pipe(gulp.dest(variables.themePath + variables.imgFolder));
+    } else {
+        console.log('---');
+        console.log('No TinyPng key provided.')
+        console.log('---');
+    }
+});
+
+
+/**
  *  Watch
  */
 gulp.task('watch', function() {
@@ -71,7 +111,9 @@ gulp.task('watch', function() {
     gulp.watch([variables.themePath + variables.jsFolder + 'modules/*.js'],['js-main']);
 });
 
+
 /**
- *  Default Task
+ *  Callable Task
  */
-gulp.task('default', ['vendors', 'sass-main', 'js-main']);
+gulp.task('default', ['bower', 'vendors', 'sass-main', 'js-main', 'images', 'watch']);
+gulp.task('develop', ['vendors', 'sass-main', 'js-main', 'images']);
