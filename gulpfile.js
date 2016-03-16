@@ -12,7 +12,17 @@ var gulp = require('gulp'),
     secretPath = './secret.json',
     secret = null;
 
-if(fs.exists(secretPath)){
+function existsSync(filePath){
+    try{
+        fs.statSync(filePath);
+    }catch(err){
+        if(err.code == 'ENOENT') return false;
+    }
+    return true;
+}
+
+
+if(existsSync(secretPath)){
     secret = JSON.parse(fs.readFileSync(secretPath));
 } else {
     console.log('---');
