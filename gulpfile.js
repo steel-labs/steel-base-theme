@@ -1,7 +1,7 @@
 var gulp = require('gulp'),
     fs = require('fs'),
     sass = require('gulp-sass'),
-    cssmin = require('gulp-minify-css'),
+    cssmin = require('gulp-clean-css'),
     rename = require('gulp-rename'),
     concat = require('gulp-concat'),
     uglify = require('gulp-uglify'),
@@ -12,7 +12,17 @@ var gulp = require('gulp'),
     secretPath = './secret.json',
     secret = null;
 
-if(fs.exists(secretPath)){
+function existsSync(filePath){
+    try{
+        fs.statSync(filePath);
+    }catch(err){
+        if(err.code == 'ENOENT') return false;
+    }
+    return true;
+}
+
+
+if(existsSync(secretPath)){
     secret = JSON.parse(fs.readFileSync(secretPath));
 } else {
     console.log('---');
