@@ -3,6 +3,13 @@
 @import "../../bower_components/sass-breakpoints/sass-breakpoints";
 @import "../../bower_components/susy/sass/susy";
 
+//Susy Settings
+$susy: (
+    columns: 12,
+    gutters: .5,
+    container: 960px
+);
+
 // Base
 @import "base/base";
 
