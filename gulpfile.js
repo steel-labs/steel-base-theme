@@ -6,20 +6,24 @@ var gulp = require('gulp'),
     concat = require('gulp-concat'),
     uglify = require('gulp-uglify'),
     replace = require('gulp-replace'),
+    plumber = require('gulp-plumber'),
     shell = require('gulp-shell'),
     tinypng = require('gulp-tinypng-compress'),
     variables = JSON.parse(fs.readFileSync('./variables.json')),
     secretPath = './secret.json',
-    secret = null;
-
-function existsSync(filePath){
-    try{
-        fs.statSync(filePath);
-    }catch(err){
-        if(err.code == 'ENOENT') return false;
-    }
-    return true;
-}
+    secret = null,
+    existsSync = function(filePath){
+        try{
+            fs.statSync(filePath);
+        }catch(err){
+            if(err.code == 'ENOENT') return false;
+        }
+        return true;
+    },
+    plumberHelper = function(obj, err) {
+        console.log(err);
+        this.emit('end');
+    };
 
 
 if(existsSync(secretPath)){
@@ -35,6 +39,9 @@ if(existsSync(secretPath)){
  */
 gulp.task('sass-main', function() {
     gulp.src(variables.themePath + variables.sassFolder + 'screen.scss')
+        .pipe(plumber({
+                handleError: function(){plumberHelper(this, err);}
+            }))
         .pipe(sass().on('error', sass.logError))
         .pipe(gulp.dest(variables.themePath + variables.cssFolder))
         .pipe(cssmin())
@@ -47,21 +54,15 @@ gulp.task('sass-main', function() {
  */
 gulp.task('js-main', function() {
     gulp.src(variables.themePath + variables.jsFolder + '/modules/*.js')
+        .pipe(plumber({
+                handleError: function(){plumberHelper(this, err);}
+            }))
         .pipe(concat('main.js'))
         .pipe(replace('@__THEMEDIR__', variables.themePathWebroot))
         .pipe(gulp.dest(variables.themePath + variables.jsFolder))
         .pipe(uglify())
         .pipe(rename({suffix: '.min'}))
         .pipe(gulp.dest(variables.themePath + variables.jsFolder));
-});
-
-/**
- *  Bower task
- */
-gulp.task('bower', function() {
-    gulp.src('*.js', {read: false})
-        .pipe(shell('bower update'));
-
 });
 
 
@@ -72,6 +73,9 @@ gulp.task('vendors', function() {
     // vendor js concat and min
     if(variables.jsVendorsPath.length){
         gulp.src(variables.jsVendorsPath)
+            .pipe(plumber({
+                handleError: function(){plumberHelper(this, err);}
+            }))
             .pipe(concat('vendors.js'))
             .pipe(gulp.dest(variables.themePath + variables.jsFolder))
             .pipe(uglify())
@@ -82,6 +86,9 @@ gulp.task('vendors', function() {
     // vendor css concat and min
     if(variables.cssVendorsPath.length){
         gulp.src(variables.cssVendorsPath)
+            .pipe(plumber({
+                handleError: function(){plumberHelper(this, err);}
+            }))
             .pipe(concat('vendors.css'))
             .pipe(gulp.dest(variables.themePath + variables.cssFolder))
             .pipe(cssmin())
@@ -97,6 +104,9 @@ gulp.task('vendors', function() {
 gulp.task('images', function () {
     if(secret && secret.TinyPng){
         gulp.src(variables.themePath + variables.imgFolder + '*.{png,jpg,jpeg}')
+            .pipe(plumber({
+                handleError: function(){plumberHelper(this, err);}
+            }))
             .pipe(tinypng({
                 key : secret.TinyPng,
                 log: true,
@@ -124,5 +134,9 @@ gulp.task('watch', function() {
 /**
  *  Callable Task
  */
-gulp.task('default', ['bower', 'vendors', 'sass-main', 'js-main', 'images', 'watch']);
 gulp.task('deploy', ['vendors', 'sass-main', 'js-main', 'images']);
+
+// Gulp deploy and watch called via shell to keep the sequence
+gulp.task('default', shell.task([
+    'bower update && gulp deploy && gulp watch'
+]));
