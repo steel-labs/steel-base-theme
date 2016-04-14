@@ -8,6 +8,7 @@ var gulp = require('gulp'),
     replace = require('gulp-replace'),
     plumber = require('gulp-plumber'),
     shell = require('gulp-shell'),
+    copy = require('gulp-copy'),
     tinypng = require('gulp-tinypng-compress'),
     variables = JSON.parse(fs.readFileSync('./variables.json')),
     secretPath = './secret.json',
@@ -94,6 +95,16 @@ gulp.task('vendors', function() {
             .pipe(cssmin())
             .pipe(rename({suffix: '.min'}))
             .pipe(gulp.dest(variables.themePath + variables.cssFolder));
+    }
+
+    // vendor assets
+    for (var path in variables.assetsVendorsPath){
+        var files = variables.assetsVendorsPath[path];
+        for(var i = 0; i < files.length; i++){
+            console.log(path + files[i]);
+            gulp.src(files[i], {cwd: path})
+                .pipe(copy(variables.themePath + variables.cssFolder))
+        }
     }
 });
 
