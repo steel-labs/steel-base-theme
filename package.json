@@ -1,12 +1,13 @@
 {
   "name": "steel_theme",
   "version": "1.0.0",
-  "description": "",
+  "description": "A starting theme based on SASS, Bower, Gulp and a fancy state of mind",
   "main": "gulpfile.js",
   "dependencies": {
     "gulp": "^3.9.1",
     "gulp-clean-css": "^2.0.3",
     "gulp-concat": "^2.6.0",
+    "gulp-copy": "0.0.2",
     "gulp-plumber": "^1.1.0",
     "gulp-rename": "^1.2.2",
     "gulp-replace": "^0.5.4",
@@ -19,7 +20,11 @@
     "postinstall": "bower update",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {}
+  "author": "Raffaele Abramini (raffaele.abramini@steellondon.com)",
+  "homepage": "http://steellondon.com",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/steel-labs/steel-base-theme.git"
+  },
+  "license": "MIT"
 }

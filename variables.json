@@ -11,5 +11,8 @@
   ],
   "cssVendorsPath" : [
 
-  ]
+  ],
+  "assetsVendorsPath" : {
+    "bower_components/slick-carousel/slick/" : ["ajax-loader.gif", "fonts/*"]
+  }
 }
