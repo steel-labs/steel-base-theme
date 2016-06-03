@@ -1,6 +1,8 @@
 var gulp = require('gulp'),
     fs = require('fs'),
     sass = require('gulp-sass'),
+    sourcemaps = require('gulp-sourcemaps'),
+    runSequence = require('run-sequence'),
     cssmin = require('gulp-clean-css'),
     rename = require('gulp-rename'),
     concat = require('gulp-concat'),
@@ -43,11 +45,18 @@ gulp.task('sass-main', function() {
         .pipe(plumber({
                 handleError: function(){plumberHelper(this, err);}
             }))
+        .pipe(sourcemaps.init())
         .pipe(sass().on('error', sass.logError))
-        .pipe(gulp.dest(variables.themePath + variables.cssFolder))
-        .pipe(cssmin())
-        .pipe(rename({suffix: '.min'}))
+        .pipe(sourcemaps.write())
         .pipe(gulp.dest(variables.themePath + variables.cssFolder));
+});
+
+
+gulp.task('css-minify', function() {
+    gulp.src(variables.themePath + variables.cssFolder + 'screen.css')
+    .pipe(cssmin())
+    .pipe(rename({suffix: '.min'}))
+    .pipe(gulp.dest(variables.themePath + variables.cssFolder));
 });
 
 /**
@@ -137,7 +146,9 @@ gulp.task('images', function () {
  *  Watch
  */
 gulp.task('watch', function() {
-    gulp.watch([variables.themePath + variables.sassFolder + '**/*.scss'],['sass-main']);
+    gulp.watch([variables.themePath + variables.sassFolder + '**/*.scss'],function(){
+        runSequence('sass-main', 'css-minify');
+    });
     gulp.watch([variables.themePath + variables.jsFolder + 'modules/*.js'],['js-main']);
 });
 
@@ -145,9 +156,9 @@ gulp.task('watch', function() {
 /**
  *  Callable Task
  */
-gulp.task('deploy', ['vendors', 'sass-main', 'js-main', 'images']);
+gulp.task('deploy', function(){
+    runSequence('vendors', 'sass-main', 'css-minify', 'js-main', 'images');
+});
 
 // Gulp deploy and watch called via shell to keep the sequence
-gulp.task('default', shell.task([
-    'gulp deploy && gulp watch'
-]));
+gulp.task('default', ['deploy', 'watch']);
