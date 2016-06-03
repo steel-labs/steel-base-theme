@@ -13,6 +13,8 @@ var gulp = require('gulp'),
     copy = require('gulp-copy'),
     tinypng = require('gulp-tinypng-compress'),
     variables = JSON.parse(fs.readFileSync('./variables.json')),
+    watch = require('gulp-watch'),
+    batch = require('gulp-batch'),
     secretPath = './secret.json',
     secret = null,
     existsSync = function(filePath){
@@ -146,10 +148,17 @@ gulp.task('images', function () {
  *  Watch
  */
 gulp.task('watch', function() {
-    gulp.watch([variables.themePath + variables.sassFolder + '**/*.scss'],function(){
-        runSequence('sass-main', 'css-minify');
-    });
-    gulp.watch([variables.themePath + variables.jsFolder + 'modules/*.js'],['js-main']);
+    watch(variables.themePath + variables.sassFolder + '**/*.scss', batch(function (events, done) {
+        events.on('data', function(){
+            runSequence('sass-main', 'css-minify');
+        }).on('end', done);
+    }));
+
+    watch([variables.themePath + variables.jsFolder + 'modules/*.js'], batch(function (events, done) {
+        events.on('data', function(){
+            runSequence('js-main');
+        }).on('end', done);
+    }));
 });
 
 
