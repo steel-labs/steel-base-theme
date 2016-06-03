@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "description": "A starting theme based on SASS, Bower, Gulp and a fancy state of mind",
   "main": "gulpfile.js",
-  "dependencies": {
+  "devDependencies": {
     "gulp": "^3.9.1",
+    "gulp-batch": "^1.0.5",
     "gulp-clean-css": "^2.0.3",
     "gulp-concat": "^2.6.0",
     "gulp-copy": "0.0.2",
@@ -13,12 +14,22 @@
     "gulp-replace": "^0.5.4",
     "gulp-sass": "^2.2.0",
     "gulp-shell": "^0.5.2",
+    "gulp-sourcemaps": "^1.6.0",
     "gulp-tinypng-compress": "^1.2.0",
-    "gulp-uglify": "^1.5.3"
+    "gulp-uglify": "^1.5.3",
+    "gulp-watch": "^4.3.6",
+    "run-sequence": "^1.2.1"
   },
   "scripts": {
-    "postinstall": "bower update",
+    "postinstall": "gulp deploy",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "bourbon": "^4.2.7",
+    "breakpoint-sass": "^2.7.0",
+    "jquery": "^2.2.4",
+    "js-cookie": "^2.1.2",
+    "susy": "^2.2.12"
   },
   "author": "Raffaele Abramini (raffaele.abramini@steellondon.com)",
   "homepage": "http://steellondon.com",
