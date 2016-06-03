@@ -149,5 +149,5 @@ gulp.task('deploy', ['vendors', 'sass-main', 'js-main', 'images']);
 
 // Gulp deploy and watch called via shell to keep the sequence
 gulp.task('default', shell.task([
-    'bower update && gulp deploy && gulp watch'
+    'gulp deploy && gulp watch'
 ]));
