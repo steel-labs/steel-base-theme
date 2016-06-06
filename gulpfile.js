@@ -169,5 +169,6 @@ gulp.task('deploy', function(){
     runSequence('vendors', 'sass-main', 'css-minify', 'js-main', 'images');
 });
 
-// Gulp deploy and watch called via shell to keep the sequence
-gulp.task('default', ['deploy', 'watch']);
+gulp.task('default', function(){
+    runSequence('deploy', 'watch');
+});
