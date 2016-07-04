@@ -15,6 +15,7 @@ var gulp = require('gulp'),
     variables = JSON.parse(fs.readFileSync('./variables.json')),
     watch = require('gulp-watch'),
     batch = require('gulp-batch'),
+    connect = require('gulp-connect'),
     secretPath = './secret.json',
     secret = null,
     existsSync = function(filePath){
@@ -58,7 +59,8 @@ gulp.task('css-minify', function() {
     return gulp.src(variables.themePath + variables.cssFolder + 'screen.css')
         .pipe(cssmin())
         .pipe(rename({suffix: '.min'}))
-        .pipe(gulp.dest(variables.themePath + variables.cssFolder));
+        .pipe(gulp.dest(variables.themePath + variables.cssFolder))
+        .pipe(connect.reload());
 });
 
 /**
@@ -74,7 +76,8 @@ gulp.task('js-main', function() {
         .pipe(gulp.dest(variables.themePath + variables.jsFolder))
         .pipe(uglify())
         .pipe(rename({suffix: '.min'}))
-        .pipe(gulp.dest(variables.themePath + variables.jsFolder));
+        .pipe(gulp.dest(variables.themePath + variables.jsFolder))
+        .pipe(connect.reload());
 });
 
 
@@ -161,6 +164,16 @@ gulp.task('watch', function() {
     }));
 });
 
+gulp.task('connect', function() {
+    connect.server({
+        port: 3000,
+        livereload: true
+    });
+});
+
+gulp.task('up', function() {
+    runSequence(['deploy', 'connect', 'watch']);
+});
 
 /**
  *  Callable Task
