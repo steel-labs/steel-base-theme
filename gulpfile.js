@@ -43,7 +43,7 @@ if(existsSync(secretPath)){
  *  Main sass task
  */
 gulp.task('sass-main', function() {
-    gulp.src(variables.themePath + variables.sassFolder + 'screen.scss')
+    return gulp.src(variables.themePath + variables.sassFolder + 'screen.scss')
         .pipe(plumber({
                 handleError: function(){plumberHelper(this, err);}
             }))
@@ -55,10 +55,10 @@ gulp.task('sass-main', function() {
 
 
 gulp.task('css-minify', function() {
-    gulp.src(variables.themePath + variables.cssFolder + 'screen.css')
-    .pipe(cssmin())
-    .pipe(rename({suffix: '.min'}))
-    .pipe(gulp.dest(variables.themePath + variables.cssFolder));
+    return gulp.src(variables.themePath + variables.cssFolder + 'screen.css')
+        .pipe(cssmin())
+        .pipe(rename({suffix: '.min'}))
+        .pipe(gulp.dest(variables.themePath + variables.cssFolder));
 });
 
 /**
@@ -166,8 +166,9 @@ gulp.task('watch', function() {
  *  Callable Task
  */
 gulp.task('deploy', function(){
-    runSequence('vendors', 'sass-main', 'css-minify', 'js-main', 'images');
+    runSequence('vendors', 'sass-main', 'css-minify', 'js-main');
 });
 
-// Gulp deploy and watch called via shell to keep the sequence
-gulp.task('default', ['deploy', 'watch']);
+gulp.task('default', function(){
+    runSequence('deploy', 'watch');
+});
