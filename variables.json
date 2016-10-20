@@ -5,6 +5,9 @@
   "cssFolder" : "css/",
   "jsFolder" : "js/",
   "imgFolder" : "img/",
+  "partialsFolder" : "partials/",
+  "layoutsFolder" : "layouts/",
+  "includesFolder" : "includes/",
   "jsVendorsPath" : [
     "node_modules/jquery/dist/jquery.js",
     "node_modules/js-cookie/src/js.cookie.js"

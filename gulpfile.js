@@ -12,6 +12,7 @@ var gulp = require('gulp'),
     shell = require('gulp-shell'),
     copy = require('gulp-copy'),
     tinypng = require('gulp-tinypng-compress'),
+    handlebars = require('gulp-compile-handlebars'),
     variables = JSON.parse(fs.readFileSync('./variables.json')),
     watch = require('gulp-watch'),
     batch = require('gulp-batch'),
@@ -146,6 +147,26 @@ gulp.task('images', function () {
     }
 });
 
+/**
+ *  Build html
+ */
+
+gulp.task('html', function () {
+    var templateData = {
+        },
+        options = {
+            batch : [variables.themePath + variables.partialsFolder + variables.includesFolder]
+        };
+
+    return gulp.src([
+        variables.themePath + variables.partialsFolder + variables.layoutsFolder + '*.hbs'
+    ])
+        .pipe(handlebars(templateData, options))
+        .pipe(rename({
+            extname: ".html"
+        }))
+        .pipe(gulp.dest('./'));
+});
 
 /**
  *  Watch
@@ -160,6 +181,12 @@ gulp.task('watch', function() {
     watch([variables.themePath + variables.jsFolder + 'modules/*.js'], batch(function (events, done) {
         events.on('data', function(){
             runSequence('js-main');
+        }).on('end', done);
+    }));
+
+    watch([variables.themePath + variables.partialsFolder + '**/*.hbs'], batch(function (events, done) {
+        events.on('data', function(){
+            runSequence('html');
         }).on('end', done);
     }));
 });
@@ -179,7 +206,7 @@ gulp.task('up', function() {
  *  Callable Task
  */
 gulp.task('deploy', function(){
-    runSequence('vendors', 'sass-main', 'css-minify', 'js-main');
+    runSequence('vendors', 'html', 'sass-main', 'css-minify', 'js-main');
 });
 
 gulp.task('default', function(){

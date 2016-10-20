@@ -28,6 +28,7 @@
   "dependencies": {
     "bourbon": "^4.2.7",
     "breakpoint-sass": "^2.7.0",
+    "gulp-compile-handlebars": "^0.6.1",
     "jquery": "^2.2.4",
     "js-cookie": "^2.1.2",
     "susy": "^2.2.12"
