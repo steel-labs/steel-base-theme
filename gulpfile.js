@@ -161,6 +161,9 @@ gulp.task('html', function () {
     return gulp.src([
         variables.themePath + variables.partialsFolder + variables.layoutsFolder + '*.hbs'
     ])
+        .pipe(plumber({
+            handleError: function(){plumberHelper(this, err);}
+        }))
         .pipe(handlebars(templateData, options))
         .pipe(rename({
             extname: ".html"

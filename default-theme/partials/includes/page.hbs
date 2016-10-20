@@ -9,15 +9,12 @@
     <link rel="stylesheet" href="/default-theme/css/screen.css">
 </head>
 <body>
-    <header class="header--main">
-        header
-    </header>
+    {{>header}}
     <main>
-        <h1>content</h1>
+        {{>@partial-block}}
     </main>
-    <footer class="footer--main">
-        footer
-    </footer>
+    {{>footer}}
+
     <script src="/default-theme/js/vendors.js"></script>
     <script src="/default-theme/js/main.js"></script>
 </body>
